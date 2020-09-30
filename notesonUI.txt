@@ -1,0 +1,56 @@
+Okay, time to figure out how to make the UI as good as possible. For the multiplayer, the people have to take turns looking
+at the screen, and their scores need to be saved on the screen so that the others can know what they have to beat. 
+
+I'm thinking something like this:
+
+
+---------------------------------------------------------------------
+| DEALER TOTAL: 6 + ??? | P2 TOTAL: 19 | P3 TOTAL: - | P4 TOTAL: - |
+---------------------------------------------------------------------
+P3 TURN 
+
+YOUR BET: 50$
+TOTAL MONEY 100$
+
+CARDS:| 5 OF CLUBS | 7 OF CLUBS |
+CARD TOTAL VALUE: 12
+
+HIT OR STAND (h/s)? 
+
+in this case, lets say you pick hit, and get a king. The screen would reset(with the help of a bunch of \n's) and look like:
+
+---------------------------------------------------------------------
+| DEALER TOTAL: 6 + ??? | P2 TOTAL: 19 | P3 TOTAL: - | P4 TOTAL: - |
+---------------------------------------------------------------------
+P3 TURN 
+
+YOUR BET: 50$
+
+CARDS:| 5 OF CLUBS | 7 OF CLUBS | KING OF SPADES |
+CARD TOTAL VALUE: 22
+
+WENT OVER 22! BUST!
+
+ENTER y TO CONTINUE TO P4
+
+afterwards, the top would be updated and P4's turn would start, repeating the process. If you didn't bust, and instead 
+chose to stand, just the message to go on to P4's turn would print underneath.
+
+---------------------------------------------------------------------
+| DEALER TOTAL: 6 + ??? | P2 TOTAL: 19 | P3 TOTAL: 22 | P4 TOTAL: - |
+---------------------------------------------------------------------
+
+at the end of the round, the game would print something along these lines:
+
+DEALER WON! 
+DEALER CASH: 400$
+P2 CASH: 70$
+P3 CASH: 75$
+P4 CASH: 0$
+
+P4 IS KICKED OUT!
+
+PLAY ANOTHER ROUND?(y/n)
+
+In the beginning, the bet screen would just be a series of prompts to show how much money you have, and ask how much you 
+wanted to bet. This is it so far, but it will be updated as I find new things I need to show on the screen.
