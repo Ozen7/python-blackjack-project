@@ -104,18 +104,75 @@ class Hand:
         if card.isace == True:
             a = True
             while a:
-                a = card.acesetupc(11)#will change the question later
+                a = card.acesetupc(int(input("1 or 11?")))#will change the question later
 
 
 
 
 #10/8/20: I have decided to move the 1/11 for aces over to the card class instead, where depending on what you choose, the value
 #of the card is directly changed to reflect your decision.
+""" Debugging for first section
 h = Hand()
-h.draw(Card("Hearts","Ace"))
+d = Deck()
+d.reset()
+h.draw(d.drawCard())
+h.draw(d.drawCard())
 print(h.showHand())
 print(h.getValueh())
-print(Card("Hearts:","Ace").acesetupc(1))
+"""
+#this class represents the total number of chips in the hand of a particular player
+class Chips:
+    #initialize the chips and put a cap on the number of chips possible
+    def __init__(self,total,player):
+        self.player = player
+        if total <= 9999:
+            self.total = total  # This can be set to a default value or supplied by a user input(addi it in the parameters)
+        else:
+            self.total = 9999
+        self.bet = 0
+    #get methods
+    def getTotal(self):
+        return self.total
+    
+    def getBet(self):
+        return self.bet
+
+    #winning or losing a bet
+    def win_bet(self): 
+        print("you won " + str(self.bet) + " chips!")
+        self.total += self.bet
+
+    def lose_bet(self):
+        print("You lost " + str(self.bet) + "chips")
+        self.total -= self.bet
+
+    #making a bet. had to use try/except in order to make sure that people cant put in werid inputs
+    def make_bet(self):
+        #ok so need to figure out how to have the first one act similarly to the rest. Basically, if you
+        #put in a weird input the first time, it says you dont have that many chips. I could do it with if/else, but thats 
+        #annoying as hell. Just brainstorm for now
+        self.bet = 10000000
+        try:
+            self.bet = int(input(self.player + ", what is your bet?"))
+        except:
+            print("incorrect input")
+        while self.bet > self.total:
+            try:
+                self.bet = int(input("you dont have that many chips! \n" + self.player + ", what is your bet?"))
+            except:
+                self.bet = int(input("invalid input: please try again! \n" + self.player + ", what is your bet?"))
+
+        
+#just testing the chips class
+p1chips = Chips(100000,"player1")
+p1chips.make_bet()
+print(p1chips.getBet())
+p1chips.win_bet()
+print(p1chips.getTotal())
+
+
+
+
 
     
 
