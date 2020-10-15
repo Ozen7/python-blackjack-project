@@ -151,28 +151,49 @@ class Chips:
         #ok so need to figure out how to have the first one act similarly to the rest. Basically, if you
         #put in a weird input the first time, it says you dont have that many chips. I could do it with if/else, but thats 
         #annoying as hell. Just brainstorm for now
+        switch = False
         self.bet = 10000000
         try:
             self.bet = int(input(self.player + ", what is your bet?"))
         except:
-            print("incorrect input")
+            print("\ninvalid input: please try again\n")
+            switch = True
         while self.bet > self.total:
             try:
-                self.bet = int(input("you dont have that many chips! \n" + self.player + ", what is your bet?"))
+                if not switch:
+                    print("\nyou dont have that many chips!\n")
+                else:
+                    switch = False
+                self.bet = int(input(self.player + ", what is your bet?"))
             except:
-                self.bet = int(input("invalid input: please try again! \n" + self.player + ", what is your bet?"))
+                print("\ninvalid input: please try again!\n")
+                switch = True
 
         
 #just testing the chips class
+"""
 p1chips = Chips(100000,"player1")
 p1chips.make_bet()
 print(p1chips.getBet())
 p1chips.win_bet()
 print(p1chips.getTotal())
+"""
 
+#now, its time to get the functions done. These functions are basically the "actions" that the player can take on their turn,
+#including hitting, standing, and bust
 
+def hit(deck,hand):
+    hand.draw(deck.drawCard())
+#testing the hit class and multiple hands using one deck
+"""
+h = Hand()
+h2 = Hand()
+d = Deck()
+d.reset()
+hit(d,h)
+hit(d,h2)
+print(h.showHand())
+print(h2.showHand())
+"""
 
-
-
-    
-
+#THIS IS WHERE THE MAIN PROGRAM STARTS
