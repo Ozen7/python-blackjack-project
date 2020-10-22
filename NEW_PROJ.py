@@ -197,3 +197,39 @@ print(h2.showHand())
 """
 
 #THIS IS WHERE THE MAIN PROGRAM STARTS
+
+playing = True
+
+numplay = input("HELLO THERE, AND WELCOME TO BACKJACK! HOW MANY PLAYERS ARE YOU PLAYING WITH? (2,3,4)")
+while numplay not in ["2","3","4"]:
+    numplay = input("INVALID INPUT: PLEASE TRY AGAIN.(2,3,4)")
+print("\nyou are playing with " + numplay + " players")
+#Creating hand and chips class for each player
+#every player has the same number of chips
+
+try:
+    total = int(input("\n\ntotal number of chips for each player(anything not a number will become 100)"))
+except:
+    total = 100
+
+
+p1chips = Chips(total,"Dealer")
+p1hand = Hand()
+
+p2chips = Chips(total,"Player 2")
+p2hand = Hand()
+
+if numplay in ["2","3"]:
+    p3chips = Chips(total,"Player 3")
+    p3hand = Hand()
+    
+if numplay == "4":
+    p4chips = Chips(total,"Player 4")
+    p4hand = Hand()
+    
+#print(p1chips.getTotal()) test the beginning
+
+    #gonna make a while loop here later
+
+
+
