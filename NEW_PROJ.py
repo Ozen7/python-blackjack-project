@@ -81,9 +81,10 @@ class Deck:
 #arises
 class Hand:
     #initialize the hand with an empty list where the cards will go, and a number containing the full value of those cards
-    def __init__(self):
+    def __init__(self,player):
         self.hand = []
         self.value = 0
+        self.player = player
     #draw one card and add it to the hand
     def draw(self,card):
         self.hand.append(card)
@@ -196,6 +197,17 @@ print(h.showHand())
 print(h2.showHand())
 """
 
+def printUI(numplayers):
+    if numplayers == 2:
+        print(
+        """
+        ---------------------------------------------------------------------
+        | DEALER TOTAL: """ + str(p1hand.hand[0].getValuec()) + """ + ??? | P2 TOTAL: """ + str(p2hand.getValueh()) + """ | P3 TOTAL: - | P4 TOTAL: - |
+        ---------------------------------------------------------------------
+        """)
+
+        
+
 #THIS IS WHERE THE MAIN PROGRAM STARTS
 
 playing = True
@@ -212,24 +224,30 @@ try:
 except:
     total = 100
 
+deck = Deck()
+deck.reset()
 
 p1chips = Chips(total,"Dealer")
-p1hand = Hand()
+p1hand = Hand("Dealer")
 
 p2chips = Chips(total,"Player 2")
-p2hand = Hand()
+p2hand = Hand("Player 2")
 
 if numplay in ["2","3"]:
     p3chips = Chips(total,"Player 3")
-    p3hand = Hand()
+    p3hand = Hand("Player 3")
     
 if numplay == "4":
     p4chips = Chips(total,"Player 4")
-    p4hand = Hand()
+    p4hand = Hand("Player 4")
     
 #print(p1chips.getTotal()) test the beginning
 
     #gonna make a while loop here later
 
+while playing:
+    p1hand.draw(deck.drawCard())
+    p2hand.draw(deck.drawCard())
+    printUI(numplay)
 
 
