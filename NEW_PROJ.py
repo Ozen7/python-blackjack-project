@@ -46,8 +46,6 @@ class Card:
             self.value = 11
             self.isace = False
             return False
-        else:
-            return True
         
 
 
@@ -88,7 +86,8 @@ class Hand:
     #draw one card and add it to the hand
     def draw(self,card):
         self.hand.append(card)
-        self.acesetuph(card)
+        if self.player != "Dealer" or len(self.hand) < 1:
+            self.acesetuph(card)
     #print out the value of the total 
     def getValueh(self):
         total = 0
@@ -105,7 +104,10 @@ class Hand:
         if card.isace == True:
             a = True
             while a:
-                a = card.acesetupc(int(input("1 or 11?")))#will change the question later
+                try:
+                    a = card.acesetupc(int(input(self.player + ", would you like your ace to be 1 or 11?(anything else will default to 1)")))#will change the question later
+                except:
+                    a = 1
 
 
 
@@ -198,6 +200,7 @@ print(h2.showHand())
 """
 
 def printUI(numplayers):
+    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
     if numplayers == 2:
         print(
         """
@@ -205,6 +208,21 @@ def printUI(numplayers):
         | DEALER TOTAL: """ + str(p1hand.hand[0].getValuec()) + """ + ??? | P2 TOTAL: """ + str(p2hand.getValueh()) + """ | P3 TOTAL: - | P4 TOTAL: - |
         ---------------------------------------------------------------------
         """)
+    elif numplayers == 3:
+        print(
+        """
+        ---------------------------------------------------------------------
+        | DEALER TOTAL: """ + str(p1hand.hand[0].getValuec()) + """ + ??? | P2 TOTAL: """ + str(p2hand.getValueh()) + """ | P3 TOTAL: """ + str(p3hand.getValueh()) + """ | P4 TOTAL: - |
+        ---------------------------------------------------------------------
+        """)
+    elif numplayers == 4:
+        print(
+        """
+        ---------------------------------------------------------------------
+        | DEALER TOTAL: """ + str(p1hand.hand[0].getValuec()) + """ + ??? | P2 TOTAL: """ + str(p2hand.getValueh()) + """ | P3 TOTAL: """ + str(p3hand.getValueh()) + """ | P4 TOTAL: """ + str(p4hand.getValueh()) + """ |
+        ---------------------------------------------------------------------
+        """)
+    
 
         
 
@@ -233,7 +251,7 @@ p1hand = Hand("Dealer")
 p2chips = Chips(total,"Player 2")
 p2hand = Hand("Player 2")
 
-if numplay in ["2","3"]:
+if numplay in ["3","4"]:
     p3chips = Chips(total,"Player 3")
     p3hand = Hand("Player 3")
     
@@ -244,10 +262,55 @@ if numplay == "4":
 #print(p1chips.getTotal()) test the beginning
 
     #gonna make a while loop here later
+'''
+p1hand.draw(Card("Spades","Two"))
+p1hand.draw(Card("Spades","Ace"))
+printUI(int(numplay))
+'''
+#play begins, and the first two cards are handed out
+print("\n\n\n\n\n\n\n\n\n\n\nEvery player gets 2 cards(aces must be chosen blindly if in first 2, as there is no chance of going over)")
+hit(deck,p1hand)
+hit(deck,p1hand)
+hit(deck,p2hand)
+hit(deck,p2hand)
+if int(numplay) >= 3:
+    hit(deck,p3hand)
+    hit(deck,p3hand)
+if int(numplay) == 4:
+    hit(deck,p4hand)
+    hit(deck,p4hand)
+printUI(int(numplay))
+order = []
+for x in range(2,int(numplay)+1):
+    order.append("Player " + str(x))
+order.append("Dealer")
+#p2 plays
+while True:
+    if p2hand.getValueh() <= 21:
+        hitorstand = input("Player 2, would you like to hit or stand?(h/s)(anything else will defualt to hit)")
+        if hitorstand.lower() == "s":
+            input("Player 2 has chosen to stand." + order[2]  + ", prepare to play(enter).")
+            break
+        else:
+            hit(deck,p2hand)
+            printUI(int(numplay))
+    else:
+        input("PLAYER 2 HAS BUSTED! GG! " + order[2] +", prepare to play(enter)")
+        break
 
-while playing:
-    p1hand.draw(deck.drawCard())
-    p2hand.draw(deck.drawCard())
-    printUI(numplay)
 
-
+#p3 plays
+if int(numplay) in [3,4]:
+    while True:
+        if p3hand.getValueh() <= 21:
+            hitorstand = input("Player 3, would you like to hit or stand?(h/s)(anything else will defualt to hit)")
+            if hitorstand.lower() == "s":
+                input("Player 3 has chosen to stand." + order[3] + ", prepare to play.")
+                break
+            else:
+                hit(deck,p3hand)
+                printUI(int(numplay))
+        else:
+            input("PLAYER 3 HAS BUSTED! GG!(" + order[3] + ", enter to continue)")
+            break
+#NOTE TO SELF: MAKE GODDAMN SURE YOU CHECK FOR ACES IN THE BEGINNING OF THE DEALER'S TURN
