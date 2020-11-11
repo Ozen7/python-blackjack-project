@@ -96,7 +96,7 @@ class Hand:
         return total
     #print out all the remaining cards (basically a copy of the deck method's one but you return it instead of printing)
     def showHand(self):
-        handstr = ""
+        handstr = "|||"
         for x in self.hand:
             handstr += x.cardName() + " ||| "
         return handstr
@@ -200,7 +200,7 @@ print(h2.showHand())
 """
 
 def printUI(numplayers):
-    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+    clear()
     if numplayers == 2:
         print(
         """
@@ -222,8 +222,10 @@ def printUI(numplayers):
         | DEALER TOTAL: """ + str(p1hand.hand[0].getValuec()) + """ + ??? | P2 TOTAL: """ + str(p2hand.getValueh()) + """ | P3 TOTAL: """ + str(p3hand.getValueh()) + """ | P4 TOTAL: """ + str(p4hand.getValueh()) + """ |
         ---------------------------------------------------------------------
         """)
-    
 
+#for convenience
+def clear():
+    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         
 
 #THIS IS WHERE THE MAIN PROGRAM STARTS
@@ -268,7 +270,9 @@ p1hand.draw(Card("Spades","Ace"))
 printUI(int(numplay))
 '''
 #play begins, and the first two cards are handed out
-print("\n\n\n\n\n\n\n\n\n\n\nEvery player gets 2 cards(aces must be chosen blindly if in first 2, as there is no chance of going over)")
+
+input("Every player gets 2 cards(aces must be chosen blindly if in first 2, as there is no chance of going over)(enter to continue)")
+clear()
 hit(deck,p1hand)
 hit(deck,p1hand)
 hit(deck,p2hand)
@@ -286,30 +290,59 @@ for x in range(2,int(numplay)+1):
 order.append("Dealer")
 #p2 plays
 while True:
-    if p2hand.getValueh() <= 21:
+    printUI(int(numplay))
+    print("Player 2 Current card total: " + str(p2hand.getValueh()), end="\n\n")
+    print("Player 2 Current cards: " + p2hand.showHand(), end = "\n\n")
+    if p2hand.getValueh() < 21:
         hitorstand = input("Player 2, would you like to hit or stand?(h/s)(anything else will defualt to hit)")
         if hitorstand.lower() == "s":
-            input("Player 2 has chosen to stand." + order[2]  + ", prepare to play(enter).")
+            clear()
+            input("Player 2 has chosen to stand." + order[1]  + ", prepare to play(enter).")
             break
         else:
             hit(deck,p2hand)
-            printUI(int(numplay))
+    elif p2hand.getValueh() == 21:
+        input("PLAYER 2 HAS HIT 21!! (" + order[1] + ", enter to continue)")
     else:
-        input("PLAYER 2 HAS BUSTED! GG! " + order[2] +", prepare to play(enter)")
+        input("PLAYER 2 HAS BUSTED! GG! (" + order[1] +", enter to continue)")
         break
 
 
 #p3 plays
 if int(numplay) in [3,4]:
     while True:
-        if p3hand.getValueh() <= 21:
+        printUI(int(numplay))
+        print("Player 3 Current card total: " + str(p3hand.getValueh()), end="\n\n")
+        print("Player 3 Current cards: " + p3hand.showHand(), end = "\n\n")
+        if p3hand.getValueh() < 21:
             hitorstand = input("Player 3, would you like to hit or stand?(h/s)(anything else will defualt to hit)")
             if hitorstand.lower() == "s":
-                input("Player 3 has chosen to stand." + order[3] + ", prepare to play.")
+                clear()
+                input("Player 3 has chosen to stand." + order[2] + ", prepare to play.(enter)")
                 break
             else:
                 hit(deck,p3hand)
-                printUI(int(numplay))
+        elif p3hand.getValueh() == 21:
+            input("PLAYER 3 HAS HIT 21!! (" + order[2] + ", enter to continue)")
+        else:
+            input("PLAYER 3 HAS BUSTED! GG!(" + order[2] + ", enter to continue)")
+            break
+#p4 plays
+if int(numplay) == 4:
+    while True:
+        printUI(int(numplay))
+        print("Player 4 Current card total: " + str(p4hand.getValueh()), end="\n\n")
+        print("Player 4 Current cards: " + p4hand.showHand(), end = "\n\n")
+        if p4hand.getValueh() < 21:
+            hitorstand = input("Player 4, would you like to hit or stand?(h/s)(anything else will defualt to hit)")
+            if hitorstand.lower() == "s":
+                clear()
+                input("Player 4 has chosen to stand." + order[3] + ", prepare to play.(enter)")
+                break
+            else:
+                hit(deck,p4hand)
+        elif p4hand.getValueh() == 21:
+            input("PLAYER 4 HAS HIT 21!! (" + order[3] + ", enter to continue)")
         else:
             input("PLAYER 3 HAS BUSTED! GG!(" + order[3] + ", enter to continue)")
             break
