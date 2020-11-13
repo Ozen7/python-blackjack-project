@@ -86,8 +86,6 @@ class Hand:
     #draw one card and add it to the hand
     def draw(self,card):
         self.hand.append(card)
-        if self.player != "Dealer" or len(self.hand) < 1:
-            self.acesetuph(card)
     #print out the value of the total 
     def getValueh(self):
         total = 0
@@ -105,7 +103,7 @@ class Hand:
             a = True
             while a:
                 try:
-                    a = card.acesetupc(int(input(self.player + ", would you like your ace to be 1 or 11?(anything else will default to 1)")))#will change the question later
+                    a = card.acesetupc(int(input(self.player + ", would you like your ace to be 1 or 11?(other inputs = 1, scoreboard shows 11)")))#will change the question later
                 except:
                     a = 1
 
@@ -271,7 +269,7 @@ printUI(int(numplay))
 '''
 #play begins, and the first two cards are handed out
 
-input("Every player gets 2 cards(aces must be chosen blindly if in first 2, as there is no chance of going over)(enter to continue)")
+input("Every player gets 2 cards(enter to continue)")
 clear()
 hit(deck,p1hand)
 hit(deck,p1hand)
@@ -289,8 +287,12 @@ for x in range(2,int(numplay)+1):
     order.append("Player " + str(x))
 order.append("Dealer")
 #p2 plays
+printUI(int(numplay))
+p2hand.acesetuph(p2hand.hand[0])
+p2hand.acesetuph(p2hand.hand[1])
 while True:
     printUI(int(numplay))
+    p2hand.acesetuph(p2hand.hand[-1])
     print("Player 2 Current card total: " + str(p2hand.getValueh()), end="\n\n")
     print("Player 2 Current cards: " + p2hand.showHand(), end = "\n\n")
     if p2hand.getValueh() < 21:
@@ -310,8 +312,12 @@ while True:
 
 #p3 plays
 if int(numplay) in [3,4]:
+    printUI(int(numplay))
+    p3hand.acesetuph(p3hand.hand[0])
+    p3hand.acesetuph(p3hand.hand[1])
     while True:
         printUI(int(numplay))
+        p3hand.acesetuph(p3hand.hand[-1])
         print("Player 3 Current card total: " + str(p3hand.getValueh()), end="\n\n")
         print("Player 3 Current cards: " + p3hand.showHand(), end = "\n\n")
         if p3hand.getValueh() < 21:
@@ -329,8 +335,12 @@ if int(numplay) in [3,4]:
             break
 #p4 plays
 if int(numplay) == 4:
+    printUI(int(numplay))
+    p2hand.acesetuph(p2hand.hand[0])
+    p2hand.acesetuph(p2hand.hand[1])
     while True:
         printUI(int(numplay))
+        p2hand.acesetuph(p2hand.hand[-1])
         print("Player 4 Current card total: " + str(p4hand.getValueh()), end="\n\n")
         print("Player 4 Current cards: " + p4hand.showHand(), end = "\n\n")
         if p4hand.getValueh() < 21:
