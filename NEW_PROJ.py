@@ -86,8 +86,6 @@ class Hand:
     #draw one card and add it to the hand
     def draw(self,card):
         self.hand.append(card)
-        if self.player != "Dealer" or len(self.hand) < 1:
-            self.acesetuph(card)
     #print out the value of the total 
     def getValueh(self):
         total = 0
@@ -105,7 +103,7 @@ class Hand:
             a = True
             while a:
                 try:
-                    a = card.acesetupc(int(input(self.player + ", would you like your ace to be 1 or 11?(anything else will default to 1)")))#will change the question later
+                    a = card.acesetupc(int(input(self.player + ", would you like your ace to be 1 or 11?(other inputs = 1, scoreboard shows 11)")))#will change the question later
                 except:
                     a = 1
 
@@ -199,13 +197,19 @@ print(h.showHand())
 print(h2.showHand())
 """
 
+#only after coding this did i realize it would be so much easier to just make 
+# it so that if there isnt a value for a player, it just prints - instead :facepalm
 def printUI(numplayers):
     clear()
+    if not dealerturn:
+        dealer = str(p1hand.hand[0].getValuec()) + """ + ???""" 
+    else:
+        dealer = str(p1hand.getValueh())
     if numplayers == 2:
         print(
         """
         ---------------------------------------------------------------------
-        | DEALER TOTAL: """ + str(p1hand.hand[0].getValuec()) + """ + ??? | P2 TOTAL: """ + str(p2hand.getValueh()) + """ | P3 TOTAL: - | P4 TOTAL: - |
+        | DEALER TOTAL: """ + dealer + """ | P2 TOTAL: """ + str(p2hand.getValueh()) + """ | P3 TOTAL: - | P4 TOTAL: - |
         ---------------------------------------------------------------------
         """)
     elif numplayers == 3:
@@ -231,14 +235,34 @@ def clear():
 #THIS IS WHERE THE MAIN PROGRAM STARTS
 
 playing = True
-
+dealerturn = False
 numplay = input("HELLO THERE, AND WELCOME TO BACKJACK! HOW MANY PLAYERS ARE YOU PLAYING WITH? (2,3,4)")
 while numplay not in ["2","3","4"]:
     numplay = input("INVALID INPUT: PLEASE TRY AGAIN.(2,3,4)")
 print("\nyou are playing with " + numplay + " players")
 #Creating hand and chips class for each player
 #every player has the same number of chips
+print("""
+RULES:
+Win condition: person with the highest number less than or equal to 21 wins
 
+In the beginning of each round, every player gets 2 cards, and so does the dealer, who covers one of their cards. The order 
+of turns is as such:
+ - P2
+ - P3
+ - P4
+ - Dealer
+
+During a turn, each player can choose to either "hit" or "stand", where a hit means take another card from the dec,
+and a stand means to lock in their current cards. The three ways to end your turn are either to stand, hit exactly 21, 
+or for the combined total of your cards to go above 21(you automatically lose). 
+
+At the beginning of each round, a player can choose how many chips to bet, where the winner takes all the chips
+at the end of the round, and ties split the prize pool evenly. If nobody wins, then all chips are lost. 
+
+Aces can be either 11 or 1, and will be decided upon drawing your card, or at the beginning of your turn. Don't worry if it says
+22 on the scorecard, that just means 2 aces.
+""")
 try:
     total = int(input("\n\ntotal number of chips for each player(anything not a number will become 100)"))
 except:
@@ -271,7 +295,7 @@ printUI(int(numplay))
 '''
 #play begins, and the first two cards are handed out
 
-input("Every player gets 2 cards(aces must be chosen blindly if in first 2, as there is no chance of going over)(enter to continue)")
+input("Every player gets 2 cards(enter to continue)")
 clear()
 hit(deck,p1hand)
 hit(deck,p1hand)
@@ -289,8 +313,13 @@ for x in range(2,int(numplay)+1):
     order.append("Player " + str(x))
 order.append("Dealer")
 #p2 plays
+printUI(int(numplay))
+p2hand.acesetuph(p2hand.hand[0])
+p2hand.acesetuph(p2hand.hand[1])
 while True:
+    print("PLAYER 2 TURN")
     printUI(int(numplay))
+    p2hand.acesetuph(p2hand.hand[-1])
     print("Player 2 Current card total: " + str(p2hand.getValueh()), end="\n\n")
     print("Player 2 Current cards: " + p2hand.showHand(), end = "\n\n")
     if p2hand.getValueh() < 21:
@@ -310,8 +339,13 @@ while True:
 
 #p3 plays
 if int(numplay) in [3,4]:
+    printUI(int(numplay))
+    p3hand.acesetuph(p3hand.hand[0])
+    p3hand.acesetuph(p3hand.hand[1])
     while True:
+        print("PLAYER 3 TURN")
         printUI(int(numplay))
+        p3hand.acesetuph(p3hand.hand[-1])
         print("Player 3 Current card total: " + str(p3hand.getValueh()), end="\n\n")
         print("Player 3 Current cards: " + p3hand.showHand(), end = "\n\n")
         if p3hand.getValueh() < 21:
@@ -329,8 +363,13 @@ if int(numplay) in [3,4]:
             break
 #p4 plays
 if int(numplay) == 4:
+    print("PLAYER 4 TURN")
+    printUI(int(numplay))
+    p4hand.acesetuph(p4hand.hand[0])
+    p4hand.acesetuph(p4hand.hand[1])
     while True:
         printUI(int(numplay))
+        p4hand.acesetuph(p4hand.hand[-1])
         print("Player 4 Current card total: " + str(p4hand.getValueh()), end="\n\n")
         print("Player 4 Current cards: " + p4hand.showHand(), end = "\n\n")
         if p4hand.getValueh() < 21:
@@ -344,6 +383,29 @@ if int(numplay) == 4:
         elif p4hand.getValueh() == 21:
             input("PLAYER 4 HAS HIT 21!! (" + order[3] + ", enter to continue)")
         else:
-            input("PLAYER 3 HAS BUSTED! GG!(" + order[3] + ", enter to continue)")
+            input("PLAYER 4 HAS BUSTED! GG!(" + order[3] + ", enter to continue)")
             break
 #NOTE TO SELF: MAKE GODDAMN SURE YOU CHECK FOR ACES IN THE BEGINNING OF THE DEALER'S TURN
+dealerturn = True
+printUI(int(numplay))
+p1hand.acesetuph(p1hand.hand[0])
+p1hand.acesetuph(p1hand.hand[1])
+while True:
+    print("DEALER TURN")
+    printUI(int(numplay))
+    p1hand.acesetuph(p1hand.hand[-1])
+    print("Dealer Current card total: " + str(p1hand.getValueh()), end="\n\n")
+    print("Dealer Current cards: " + p1hand.showHand(), end = "\n\n")
+    if p1hand.getValueh() < 21:
+        hitorstand = input("Dealer, would you like to hit or stand?(h/s)(anything else will defualt to hit)")
+        if hitorstand.lower() == "s":
+            clear()
+            input("Dealer has chosen to stand. (enter to finish round)")
+            break
+        else:
+            hit(deck,p1hand)
+    elif p1hand.getValueh() == 21:
+        input("DEALER HAS HIT 21!! (enter to finish round)")
+    else:
+        input("DEALER HAS BUSTED! GG!(enter to finish round)")
+        break
