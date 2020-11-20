@@ -94,7 +94,7 @@ class Hand:
         return total
     #print out all the remaining cards (basically a copy of the deck method's one but you return it instead of printing)
     def showHand(self):
-        handstr = "|||"
+        handstr = "||| "
         for x in self.hand:
             handstr += x.cardName() + " ||| "
         return handstr
@@ -253,7 +253,7 @@ of turns is as such:
  - P4
  - Dealer
 
-During a turn, each player can choose to either "hit" or "stand", where a hit means take another card from the dec,
+During a turn, each player can choose to either "hit" or "stand", where a hit means take another card from the deck,
 and a stand means to lock in their current cards. The three ways to end your turn are either to stand, hit exactly 21, 
 or for the combined total of your cards to go above 21(you automatically lose). 
 
@@ -299,14 +299,18 @@ input("Every player gets 2 cards(enter to continue)")
 clear()
 hit(deck,p1hand)
 hit(deck,p1hand)
+p1chips.make_bet()
 hit(deck,p2hand)
 hit(deck,p2hand)
+p2chips.make_bet()
 if int(numplay) >= 3:
     hit(deck,p3hand)
     hit(deck,p3hand)
+    p3chips.make_bet()
 if int(numplay) == 4:
     hit(deck,p4hand)
     hit(deck,p4hand)
+    p4chips.make_bet()
 printUI(int(numplay))
 order = []
 for x in range(2,int(numplay)+1):
@@ -316,12 +320,15 @@ order.append("Dealer")
 printUI(int(numplay))
 p2hand.acesetuph(p2hand.hand[0])
 p2hand.acesetuph(p2hand.hand[1])
+lst = [p1hand,p2hand]
 while True:
-    print("PLAYER 2 TURN")
     printUI(int(numplay))
+    print("PLAYER 2 TURN\n")
     p2hand.acesetuph(p2hand.hand[-1])
-    print("Player 2 Current card total: " + str(p2hand.getValueh()), end="\n\n")
-    print("Player 2 Current cards: " + p2hand.showHand(), end = "\n\n")
+    print("Current bet: " + str(p2chips.getBet()),end="\n\n")
+    print("Current card total: " + str(p2hand.getValueh()), end="\n\n")
+    print("Current cards: " + p2hand.showHand(), end = "\n\n")
+    
     if p2hand.getValueh() < 21:
         hitorstand = input("Player 2, would you like to hit or stand?(h/s)(anything else will defualt to hit)")
         if hitorstand.lower() == "s":
@@ -332,6 +339,7 @@ while True:
             hit(deck,p2hand)
     elif p2hand.getValueh() == 21:
         input("PLAYER 2 HAS HIT 21!! (" + order[1] + ", enter to continue)")
+        break
     else:
         input("PLAYER 2 HAS BUSTED! GG! (" + order[1] +", enter to continue)")
         break
@@ -339,15 +347,17 @@ while True:
 
 #p3 plays
 if int(numplay) in [3,4]:
+    lst.append(p3hand)
     printUI(int(numplay))
     p3hand.acesetuph(p3hand.hand[0])
     p3hand.acesetuph(p3hand.hand[1])
     while True:
-        print("PLAYER 3 TURN")
         printUI(int(numplay))
+        print("PLAYER 3 TURN\n")
         p3hand.acesetuph(p3hand.hand[-1])
-        print("Player 3 Current card total: " + str(p3hand.getValueh()), end="\n\n")
-        print("Player 3 Current cards: " + p3hand.showHand(), end = "\n\n")
+        print("Current bet: " + str(p3chips.getBet()),end="\n\n")
+        print("Current card total: " + str(p3hand.getValueh()), end="\n\n")
+        print("Current cards: " + p3hand.showHand(), end = "\n\n")
         if p3hand.getValueh() < 21:
             hitorstand = input("Player 3, would you like to hit or stand?(h/s)(anything else will defualt to hit)")
             if hitorstand.lower() == "s":
@@ -358,20 +368,24 @@ if int(numplay) in [3,4]:
                 hit(deck,p3hand)
         elif p3hand.getValueh() == 21:
             input("PLAYER 3 HAS HIT 21!! (" + order[2] + ", enter to continue)")
+            break
         else:
             input("PLAYER 3 HAS BUSTED! GG!(" + order[2] + ", enter to continue)")
             break
 #p4 plays
 if int(numplay) == 4:
+    lst.append(p4hand)
     print("PLAYER 4 TURN")
     printUI(int(numplay))
     p4hand.acesetuph(p4hand.hand[0])
     p4hand.acesetuph(p4hand.hand[1])
-    while True:
+    while True: 
         printUI(int(numplay))
+        print("PLAYER 4 TURN\n")
         p4hand.acesetuph(p4hand.hand[-1])
-        print("Player 4 Current card total: " + str(p4hand.getValueh()), end="\n\n")
-        print("Player 4 Current cards: " + p4hand.showHand(), end = "\n\n")
+        print("Current bet: " + str(p4chips.getBet()),end="\n\n")
+        print("Current card total: " + str(p4hand.getValueh()), end="\n\n")
+        print("Current cards: " + p4hand.showHand(), end = "\n\n")
         if p4hand.getValueh() < 21:
             hitorstand = input("Player 4, would you like to hit or stand?(h/s)(anything else will defualt to hit)")
             if hitorstand.lower() == "s":
@@ -382,6 +396,7 @@ if int(numplay) == 4:
                 hit(deck,p4hand)
         elif p4hand.getValueh() == 21:
             input("PLAYER 4 HAS HIT 21!! (" + order[3] + ", enter to continue)")
+            break
         else:
             input("PLAYER 4 HAS BUSTED! GG!(" + order[3] + ", enter to continue)")
             break
@@ -390,12 +405,13 @@ dealerturn = True
 printUI(int(numplay))
 p1hand.acesetuph(p1hand.hand[0])
 p1hand.acesetuph(p1hand.hand[1])
-while True:
-    print("DEALER TURN")
+while True: 
     printUI(int(numplay))
+    print("DEALER TURN\n")
     p1hand.acesetuph(p1hand.hand[-1])
-    print("Dealer Current card total: " + str(p1hand.getValueh()), end="\n\n")
-    print("Dealer Current cards: " + p1hand.showHand(), end = "\n\n")
+    print("Current bet: " + str(p1chips.getBet()),end="\n\n")
+    print("Current card total: " + str(p1hand.getValueh()), end="\n\n")
+    print("Current cards: " + p1hand.showHand(), end = "\n\n")
     if p1hand.getValueh() < 21:
         hitorstand = input("Dealer, would you like to hit or stand?(h/s)(anything else will defualt to hit)")
         if hitorstand.lower() == "s":
@@ -406,6 +422,19 @@ while True:
             hit(deck,p1hand)
     elif p1hand.getValueh() == 21:
         input("DEALER HAS HIT 21!! (enter to finish round)")
+        break
     else:
         input("DEALER HAS BUSTED! GG!(enter to finish round)")
         break
+
+
+lstsrt = lst.sort(key = lambda x: x.value)
+winner = lst[0]
+print(winner)
+
+
+
+
+
+
+print("This round's winner is: " + winner.player)
