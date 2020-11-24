@@ -139,9 +139,8 @@ class Chips:
         return self.bet
 
     #winning or losing a bet
-    def win_bet(self): 
-        print("you won " + str(self.bet) + " chips!")
-        self.total += self.bet
+    def win_bet(self,amtwon): 
+        self.total += amtwon
 
     def lose_bet(self):
         print("You lost " + str(self.bet) + "chips")
@@ -303,14 +302,18 @@ p1chips.make_bet()
 hit(deck,p2hand)
 hit(deck,p2hand)
 p2chips.make_bet()
+total_bets = p1chips.getBet() + p2chips.getBet()
 if int(numplay) >= 3:
     hit(deck,p3hand)
     hit(deck,p3hand)
     p3chips.make_bet()
+    total_bets += p3chips.getBet()
 if int(numplay) == 4:
     hit(deck,p4hand)
     hit(deck,p4hand)
     p4chips.make_bet()
+    total_bets += p4chips.getBet()
+
 printUI(int(numplay))
 order = []
 for x in range(2,int(numplay)+1):
@@ -428,13 +431,43 @@ while True:
         break
 
 
+#finding out who won the round
+winner = []
 lstsrt = lst.sort(key = lambda x: x.value)
-winner = lst[0]
-print(winner)
+for x in lstsrt:
+    if x.getValueh() >= 21:
+        lstsrt.remove(x)
+for x in lstsrt:
+    if x.getValueh() == lstsrt[0].getValueh():
+        winner.append(x)
 
 
 
 
 
+#winner announcement
 
-print("This round's winner is: " + winner.player)
+if len(winner) == 1:
+    print("This round's winner is: " + winner[0].player )
+    print(winner[0].player + " gets " + total_bets + " chips!")
+    winner[0].
+elif len(winner) == 0:
+    print("Wow yall suck. Nobody won. Good job")
+else:
+    print("The winners of this round are: ||| ",end = "")
+    for x in winner:
+        print(x.player + " ||| ")
+
+#giving chips to winner(s)
+
+
+
+"""
+(Messae to self 11/23/20)
+OKAY DONT PANIC. Your next step is to make sure you create a brand-new Player class. While creating this class, 
+go back and fix a lot of the other Classes. Basically, this project aint going anywhere until you fix it all up.
+FOR GODS SAKE PLEASE PLEASE PLEASE PUT ALL THE CLASSES IN A DIFFERENT FILE. This project is far from over, and, hey, better
+now that in an actual work environment. Make sure its more organized in the code, and include more white space and clarity
+using comments. Structure it in a way that makes sense and make sure everything is right this time before trying to continue.
+You will grow from this, but you gotta push through the temporary dissapointment. Play some hype music, relax, and start
+from the top.
