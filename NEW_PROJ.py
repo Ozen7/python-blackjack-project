@@ -14,10 +14,11 @@ def turn(player):
             printUI(int(numplay))
             print(player.getname().upper() + " TURN\n")
             player.hand.acesetuph(player.hand.hand[-1])
-            print("Current bet: " + str(player.chips.getBet()),end="\n\n")
+            printUI(int(numplay))
+            print(player.getname().upper() + " TURN\n")
             print("Current card total: " + str(player.hand.getValueh()), end="\n\n")
+            print("Current bet: " + str(player.chips.getBet()),end="\n\n")
             print("Current cards: " + player.hand.showHand(), end = "\n\n")
-            p2
             if player.hand.getValueh() < 21:
                 hitorstand = input(player.getname() + ", would you like to hit or stand?(h/s)(anything else will defualt to hit)")
                 if hitorstand.lower() == "s":
@@ -53,6 +54,7 @@ def printUI(numplayers):
         dealer = str(p1.hand.hand[0].getValuec()) + """ + ???""" 
     else:
         dealer = str(p1.hand.getValueh())
+
     if numplayers == 2:
         print(
         """
@@ -64,24 +66,24 @@ def printUI(numplayers):
         print(
         """
         ---------------------------------------------------------------------
-        | DEALER TOTAL: """ + str(p1.hand.hand[0].getValuec()) + """ + ??? | P2 TOTAL: """ + str(p2.hand.getValueh()) + """ | P3 TOTAL: """ + str(p3.hand.getValueh()) + """ | P4 TOTAL: - |
+        | DEALER TOTAL: """ + dealer + """ | P2 TOTAL: """ + str(p2.hand.getValueh()) + """ | P3 TOTAL: """ + str(p3.hand.getValueh()) + """ | P4 TOTAL: - |
         ---------------------------------------------------------------------
         """)
     elif numplayers == 4:
         print(
         """
         ---------------------------------------------------------------------
-        | DEALER TOTAL: """ + str(p1.hand.hand[0].getValuec()) + """ + ??? | P2 TOTAL: """ + str(p2.hand.getValueh()) + """ | P3 TOTAL: """ + str(p3.hand.getValueh()) + """ | P4 TOTAL: """ + str(p4hand.getValueh()) + """ |
+        | DEALER TOTAL: """ + dealer + """ | P2 TOTAL: """ + str(p2.hand.getValueh()) + """ | P3 TOTAL: """ + str(p3.hand.getValueh()) + """ | P4 TOTAL: """ + str(p4hand.getValueh()) + """ |
         ---------------------------------------------------------------------
         """)
 
 #for convenience
 def clear():
-    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
 
 #THIS IS WHERE THE MAIN PROGRAM STARTS
-dealerturn = False
+
 playing = True
 numplay = input("HELLO THERE, AND WELCOME TO BACKJACK! HOW MANY PLAYERS ARE YOU PLAYING WITH? (2,3,4)")
 while numplay not in ["2","3","4"]:
@@ -129,16 +131,20 @@ p2chips = Chips(total,"Player 2")
 p2hand = Hand("Player 2")
 p2 = Player(p2hand,p2chips,"Player 2",True)
 
+playerlist = [p1,p2]
 if numplay in ["3","4"]:
     p3chips = Chips(total,"Player 3")
     p3hand = Hand("Player 3")
     p3 = Player(p3hand,p3chips,"Player 3",True)
+    playerlist.append(p3)
 else:
     p3 = Player(None,None,None,False)
     
 if numplay == "4":
     p4chips = Chips(total,"Player 4")
     p4hand = Hand("Player 4")
+    p4 = Player(p4hand,p4chips,"Player 4",True)
+    playerlist.append(p4)
 else:
     p4 = Player(None,None,None,False)
     
@@ -151,44 +157,100 @@ p1hand.draw(Card("Spades","Ace"))
 printUI(int(numplay))
 '''
 #play begins, and the first two cards are handed out
+while True:
+    dealerturn = False
+    deck.reset()
+    p1.hand.clearhand()
+    p2.hand.clearhand()
+    if p3.null:
+        p3.hand.clearhand()
+    if p4.null:
+        p4.hand.clearhand()
 
-input("Every player gets 2 cards(enter to continue)")
-clear()
-hit(deck,p1.hand)
-hit(deck,p1.hand)
-p1.chips.make_bet()
-hit(deck,p2.hand)
-hit(deck,p2.hand)
-p2.chips.make_bet()
-total_bets = p1chips.getBet() + p2chips.getBet()
-if int(numplay) >= 3:
-    hit(deck,p3hand)
-    hit(deck,p3hand)
-    p3chips.make_bet()
-    total_bets += p3chips.getBet()
-if int(numplay) == 4:
-    hit(deck,p4hand)
-    hit(deck,p4hand)
-    p4chips.make_bet()
-    total_bets += p4chips.getBet()
+    input("Every player gets 2 cards(enter to continue)")
+    clear()
+    hit(deck,p1.hand)
+    hit(deck,p1.hand)
+    p1.chips.make_bet()
+    clear()
+    hit(deck,p2.hand)
+    hit(deck,p2.hand)
+    p2.chips.make_bet()
+    clear()
+    total_bets = p1chips.getBet() + p2chips.getBet()
+    if int(numplay) >= 3:
+        hit(deck,p3hand)
+        hit(deck,p3hand)
+        p3chips.make_bet()
+        clear()
+        total_bets += p3chips.getBet()
+    if int(numplay) == 4:
+        hit(deck,p4hand)
+        hit(deck,p4hand)
+        p4chips.make_bet()
+        clear()
+        total_bets += p4chips.getBet()
 
-printUI(int(numplay))
-order = []
-for x in range(2,int(numplay)+1):
-    order.append("Player " + str(x))
-order.append("Dealer")
+    printUI(int(numplay))
+    order = []
+    for x in range(2,int(numplay)+1):
+        order.append("Player " + str(x))
+    order.append("Dealer")
 
 
-#p2 plays
-turn(p2)
-#p3 plays
-turn(p3)
-#p4 plays
-turn(p4)
-#NOTE TO SELF: MAKE GODDAMN SURE YOU CHECK FOR ACES IN THE BEGINNING OF THE DEALER'S TURN
-dealerturn = True
-turn(p1)
+    #p2 plays
+    turn(p2)
+    #p3 plays
+    turn(p3)
+    #p4 plays
+    turn(p4)
+    #NOTE TO SELF: MAKE GODDAMN SURE YOU CHECK FOR ACES IN THE BEGINNING OF THE DEALER'S TURN
+    dealerturn = True
+    turn(p1)
 
+
+    winners = []
+    for x in playerlist:
+        if x.hand.getValueh() > 21:
+            continue
+        elif winners == []:
+            winners.append(x)
+            continue
+        if x.hand.getValueh() > winners[0].hand.getValueh():
+            winners.clear()
+            winners.append(x)
+        elif x.hand.getValueh() == winners[0].hand.getValueh():
+            winners.append(x)
+
+    clear()
+
+    if len(winners) > 1:
+        print("WINNERS ARE: |", end  = "")
+        for x in winners:
+            print(x.getname() + "| ")
+            x.chips.win_bet(x.chips.getBet())
+            
+    elif len(winners) == 0:
+        print("EVERYONE BUSTED!!! Nobody wins :(")
+
+            
+    else:
+        print("Winner: " + winners[0].getname())
+        winners[0].chips.win_bet(winners[0].chips.getBet())
+        print("New # of CHIPS: " + str(winners[0].chips.getTotal()))
+
+    #printing out the new values of chip counts
+    print("New chip counts...")
+    for x in playerlist:
+        print(x.player + ": " + str(x.chips.getTotal()))
+        x.chips.win_bet(10)
+
+
+    if input("play again? (y/n) (other inputs = y)") == "n":
+        clear()
+
+        break
+    print("all players gain 10 chips!")
 
 
 

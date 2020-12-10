@@ -79,7 +79,6 @@ class Hand:
     #initialize the hand with an empty list where the cards will go, and a number containing the full value of those cards
     def __init__(self,player):
         self.hand = []
-        self.value = 0
         self.player = player
     #draw one card and add it to the hand
     def draw(self,card):
@@ -90,6 +89,8 @@ class Hand:
         for card in self.hand:
             total += card.getValuec()
         return total
+    def clearhand(self):
+        self.hand = []
     #print out all the remaining cards (basically a copy of the deck method's one but you return it instead of printing)
     def showHand(self):
         handstr = "||| "
@@ -104,6 +105,7 @@ class Hand:
                     a = card.acesetupc(int(input(self.player + ", would you like your ace to be 1 or 11?(scoreboard shows 11)")))#will change the question later
                 except:
                     print("Invalid input. Try again \n")
+        
 
 
 
@@ -149,6 +151,7 @@ class Chips:
         #ok so need to figure out how to have the first one act similarly to the rest. Basically, if you
         #put in a weird input the first time, it says you dont have that many chips. I could do it with if/else, but thats 
         #annoying as hell. Just brainstorm for now
+        print(self.player + " Current # of chips: " + str(self.getTotal()))
         switch = False
         self.bet = 10000000
         try:
