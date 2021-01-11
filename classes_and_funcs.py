@@ -169,6 +169,8 @@ class Chips:
             except:
                 print("\ninvalid input: please try again!\n")
                 switch = True
+        self.total -= self.bet
+        print(self.bet)
 
         
 #just testing the chips class

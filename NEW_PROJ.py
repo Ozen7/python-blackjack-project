@@ -227,20 +227,23 @@ while True:
     if len(winners) > 1:
         print("WINNERS ARE: |", end  = "")
         for x in winners:
-            print(x.getname() + "| ")
+            print(x.getname() + "| ", end = "")
+            x.chips.win_bet(x.chips.getBet())
             x.chips.win_bet(x.chips.getBet())
             
-    elif len(winners) == 0:
+    elif len(winners) < 1:
         print("EVERYONE BUSTED!!! Nobody wins :(")
 
             
     else:
         print("Winner: " + winners[0].getname())
+        print(winners[0].chips.getTotal())
+        winners[0].chips.win_bet(winners[0].chips.getBet())
         winners[0].chips.win_bet(winners[0].chips.getBet())
         print("New # of CHIPS: " + str(winners[0].chips.getTotal()))
 
     #printing out the new values of chip counts
-    print("New chip counts...")
+    print("\n\nNew chip counts...")
     for x in playerlist:
         print(x.player + ": " + str(x.chips.getTotal()))
         x.chips.win_bet(10)
