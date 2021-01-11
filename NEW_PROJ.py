@@ -212,6 +212,7 @@ while True:
     winners = []
     for x in playerlist:
         if x.hand.getValueh() > 21:
+            x.chips.lose_bet()
             continue
         elif winners == []:
             winners.append(x)
@@ -219,8 +220,11 @@ while True:
         if x.hand.getValueh() > winners[0].hand.getValueh():
             winners.clear()
             winners.append(x)
+            continue
         elif x.hand.getValueh() == winners[0].hand.getValueh():
             winners.append(x)
+            continue
+        x.chips.lose_bet()
 
     clear()
 
@@ -237,6 +241,7 @@ while True:
     else:
         print("Winner: " + winners[0].getname())
         winners[0].chips.win_bet(winners[0].chips.getBet())
+
         print("New # of CHIPS: " + str(winners[0].chips.getTotal()))
 
     #printing out the new values of chip counts
